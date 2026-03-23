@@ -80,11 +80,6 @@ module move_stl::skip_list {
         *vector::borrow(&list.head, 0)
     }
 
-    /// Return the tail of the skip list.
-    public fun tail<V: store>(list: &SkipList<V>): OptionU64 {
-        list.tail
-    }
-
     /// Destroys an empty skip list
     /// Aborts with `ETableNotEmpty` if the list still contains values
     public fun destroy_empty<V: store + drop>(list: SkipList<V>) {
