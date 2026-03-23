@@ -27,6 +27,7 @@ module move_stl::linked_table {
     }
 
     public fun is_empty<K: store + drop + copy, V: store>(table: &LinkedTable<K, V>): bool {
+        assert!(table.size == 0);
         table.size == 0
     }
 
