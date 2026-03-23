@@ -202,40 +202,6 @@ module move_stl::skip_list {
         list.size = list.size + 1;
     }
 
-    /// Remove the score-value from skip list, abort if the score not exist in list.
-    public fun remove<V: store>(list: &mut SkipList<V>, score: u64): V {
-        assert!(contains(list, score), ENodeDoesNotExist);
-        let (mut l, mut nexts) = (list.level, &mut list.head);
-        let node: Node<V> = field::remove(&mut list.id, score);
-        while (l > 0) {
-            let mut opt_next_score = vector::borrow_mut(nexts, l - 1);
-            while (is_some_and_lte(opt_next_score, score)) {
-                let next_score = option_u64::borrow(opt_next_score);
-                if (next_score == score) {
-                    *opt_next_score = *vector::borrow(&node.nexts, l - 1);
-                } else {
-                    let node = borrow_mut_node(list, next_score);
-                    nexts = &mut node.nexts;
-                    opt_next_score = vector::borrow_mut(nexts, l - 1);
-                }
-            };
-            l = l - 1;
-        };
-
-        if (option_u64::borrow(&list.tail) == score) {
-            list.tail = node.prev;
-        };
-
-        let opt_l0_next_score = vector::borrow(&node.nexts, 0);
-        if (is_some(opt_l0_next_score)) {
-            let next_node = borrow_mut_node(list, option_u64::borrow(opt_l0_next_score));
-            next_node.prev = node.prev;
-        };
-        list.size = list.size - 1;
-
-        drop_node(node)
-    }
-
     /// Return the next score.
     public fun find_next<V: store>(list: &SkipList<V>, score: u64, include: bool): OptionU64 {
         let opt_finded_score = find(list, score);
