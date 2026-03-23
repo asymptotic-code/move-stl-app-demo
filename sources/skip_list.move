@@ -72,6 +72,8 @@ module move_stl::skip_list {
         list.size == 0
     }
 
+    // lol
+
     /// Return the head of the skip list.
     public fun head<V: store>(list: &SkipList<V>): OptionU64 {
         if (is_empty(list)) {
